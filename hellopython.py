@@ -4,6 +4,7 @@ def calculator():
     print("2. 뺄셈")
     print("3. 곱셈")
     print("4. 나눗셈")
+    print("5. test")
     
     while True:
         try:
