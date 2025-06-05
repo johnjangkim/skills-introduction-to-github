@@ -3,7 +3,6 @@ import sys
 import os
 import google.generativeai as genai
 from typing import List, Dict
-import os
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -86,9 +85,6 @@ def semantic_search_verses(verses: List[Dict], query: str) -> List[Dict]:
     try:
         # 모든 구절을 하나의 문자열로 결합
         verses_text = "\n".join([f"{v['reference']}: {v['content']}" for v in verses])
-        
-        # Gemini 모델 설정
-        model = genai.GenerativeModel('gemini-1.0-pro')
         
         # 프롬프트 구성
         prompt = f"""당신은 성경 구절을 검색하는 도우미입니다.
