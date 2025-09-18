@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>성경 구절 검색</title>
+</head>
+<body>
+    <h1>성경 구절 검색</h1>
+    <a href="#add-form" id="add-link" style="font-weight:bold;">추가 등록</a>
+    <form method="POST" action="/">
+        <input type="text" name="keyword" placeholder="검색어를 입력하세요" value="{{ keyword }}" required>
+        <label>
+            <input type="radio" name="search_type" value="keyword" {% if search_type == 'keyword' %}checked{% endif %}> 일반 검색
+        </label>
+        <label>
+            <input type="radio" name="search_type" value="semantic" {% if search_type == 'semantic' %}checked{% endif %}> 의미론적 검색(Gemini)
+        </label>
+        <button type="submit">검색</button>
+    </form>
+    <h2>검색 결과</h2>
+    {% if results %}
+        <ul>
+        {% for verse in results %}
+            <li><strong>{{ verse.reference }}</strong>: {{ verse.content }}
+            {% if search_type == 'semantic' %}
+                <form method="POST" action="/add" style="display:inline;">
+                    <input type="hidden" name="reference" value="{{ verse.reference }}">
+                    <input type="hidden" name="content" value="{{ verse.content }}">
+                    <input type="hidden" name="search_type" value="{{ search_type }}">
+                    <input type="hidden" name="keyword" value="{{ keyword }}">
+                    <input type="hidden" name="from_semantic" value="1">
+                    <button type="submit">추가 등록</button>
+                </form>
+            {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% elif keyword %}
+        <p>검색 결과가 없습니다.</p>
+    {% endif %}
+    <hr>
+    <h2 id="add-form">구절 추가</h2>
+    <form method="POST" action="/add">
+        <input type="text" id="add-reference" name="reference" placeholder="참조 (예: 요한복음 3:16)" required>
+        <input type="text" name="content" placeholder="내용" required>
+        <button type="submit">추가</button>
+    </form>
+    <hr>
+    <a href="/all">모든 구절 보기</a>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+        {% for category, message in messages %}
+          <li style="color: {% if category == 'danger' %}red{% elif category == 'success' %}green{% else %}black{% endif %};">{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+<script>
+document.getElementById('add-link').addEventListener('click', function(e) {
+    setTimeout(function() {
+        document.getElementById('add-reference').focus();
+    }, 100);
+});
+</script>
+</body>
+</html> 

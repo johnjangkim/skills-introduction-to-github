@@ -54,6 +54,7 @@ build/
 venv/
 env/
 ENV/
+.venv/
 
 # IDE specific files
 .vscode/

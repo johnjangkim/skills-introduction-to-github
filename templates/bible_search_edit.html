@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>구절 수정</title>
+</head>
+<body>
+    <h1>구절 수정</h1>
+    <form method="POST">
+        <label>참조: <input type="text" name="reference" value="{{ verse.reference }}" readonly></label><br>
+        <label>내용:<br>
+            <textarea name="content" rows="4" cols="60" required>{{ verse.content }}</textarea>
+        </label><br>
+        <button type="submit">수정</button>
+        <a href="/all">취소</a>
+    </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+        {% for category, message in messages %}
+          <li style="color: {% if category == 'danger' %}red{% elif category == 'success' %}green{% else %}black{% endif %};">{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+</body>
+</html> 
